@@ -4,17 +4,17 @@ import com.pluralsight.conference.model.Speaker;
 import com.pluralsight.conference.repository.util.SpeakerRowMapper;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+//import org.springframework.jdbc.core.PreparedStatementCreator;
 //import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-//import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+//import org.springframework.jdbc.support.GeneratedKeyHolder;
+//import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-//import java.util.ArrayList;
-//import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-//import java.util.Map;
+import java.util.Map;
 
 @Repository("speakerRepository")
 public class SpeakerRepositoryImpl implements SpeakerRepository {
@@ -39,7 +39,7 @@ public class SpeakerRepositoryImpl implements SpeakerRepository {
         /* Option 1 -- Uses SQL */
         //jdbcTemplate.update("INSERT INTO speaker (name) VALUES (?)",speaker.getName());
 
-        /* Option 1A -- Only if you care that an object is returned after its creation, a lot of extrawork */
+        /* Option 1A -- Only if you care that an object is returned after its creation, a lot of extrawork 
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
@@ -55,9 +55,9 @@ public class SpeakerRepositoryImpl implements SpeakerRepository {
         Number id = keyHolder.getKey();
 
         return getSpeaker(id.intValue());
-
+        */
          
-        /* Option 2 -- More wordy but flexible (ORM approach) 
+        /* Option 2 -- More wordy but flexible (ORM approach)   */
         SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate);
         insert.setTableName("speaker");
 
@@ -69,15 +69,27 @@ public class SpeakerRepositoryImpl implements SpeakerRepository {
 
         insert.setGeneratedKeyName("id");
 
-        Number key = insert.executeAndReturnKey(data);
-        System.out.println(key);
-        */
-
+        Number id = insert.executeAndReturnKey(data);
+        return getSpeaker(id.intValue()); //This is ONLY to retrieve the object after its creation
 
        //return null; 
     }
 
-    private Speaker getSpeaker(int id) {
+    @Override
+    public Speaker getSpeaker(int id) {
         return jdbcTemplate.queryForObject("SELECT * FROM speaker WHERE id = ?", new SpeakerRowMapper(), id);
     }
+
+    @Override
+    public Speaker getLastSpeaker() {
+        return jdbcTemplate.queryForObject("SELECT * FROM SPEAKER ORDER BY ID DESC NULLS LAST LIMIT 1", new SpeakerRowMapper());
+    }
+
+    @Override
+    public Speaker updateSpeaker(Speaker speaker) {
+        
+        jdbcTemplate.update("UPDATE speaker SET name = ? WHERE id = ?", speaker.getName(), speaker.getId());
+        return speaker; 
+    }
+
 }

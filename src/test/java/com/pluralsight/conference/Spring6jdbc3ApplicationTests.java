@@ -46,4 +46,45 @@ class Spring6jdbc3ApplicationTests {
             System.out.println("Speaker name: " + speaker.getName());
         }
     }
+
+    @Test
+    void testGetSpeaker() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Speaker speaker = restTemplate.getForObject("http://localhost:8080/speaker/{id}", Speaker.class, 326);
+
+        System.out.println("Speaker name: " + speaker.getName());
+
+        
+    }   
+
+    @Test
+    void testGetLastSpeaker() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Speaker speaker = restTemplate.getForObject("http://localhost:8080/speaker/last", Speaker.class);
+
+        System.out.println("Speaker name: " + speaker.getName());
+    }
+
+    @Test
+    void testUpdateSpeaker() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Speaker speaker = restTemplate.getForObject("http://localhost:8080/speaker/{id}", Speaker.class, 326);
+        speaker.setName(speaker.getName() + "Sr."); //Update the records
+
+        restTemplate.put("http://localhost:8080/speaker", speaker); 
+
+        System.out.println("Speaker name: " + speaker.getName());
+
+        
+    }  
+    
+    @Test
+    void testBatchUpdate() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        restTemplate.getForObject("http://localhost:8080/speaker/batch", String.class);
+    }
 }
