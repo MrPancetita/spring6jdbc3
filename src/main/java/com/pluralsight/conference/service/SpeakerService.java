@@ -13,4 +13,8 @@ public interface SpeakerService {
     Speaker getLastSpeaker();
 
     Speaker updateSpeaker(Speaker speaker);
+
+    void batch();
+
+    void delete(int id);
 }

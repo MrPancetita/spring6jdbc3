@@ -4,6 +4,7 @@ import com.pluralsight.conference.model.Speaker;
 import com.pluralsight.conference.repository.SpeakerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //ServiceTier for business logic
@@ -40,5 +41,32 @@ public class SpeakerServiceImpl implements SpeakerService {
     @Override
     public Speaker updateSpeaker(Speaker speaker) {
         return speakerRepository.updateSpeaker(speaker);
+    }
+
+    @Override
+    public void batch() {
+        List<Speaker> speakers = speakerRepository.findAll();
+        
+        List<Object[]> pairs = new ArrayList<>();
+        for (Speaker speaker : speakers) {
+            Object[] tmp = {"Java", speaker.getId()};
+            pairs.add(tmp);
+        }
+
+        speakerRepository.updateSpeaker(pairs);
+    }
+
+    public int getLastSpeakerId() {
+        Speaker lastSpeaker = getLastSpeaker();
+        if (lastSpeaker == null) {
+            return 0;
+        } else {
+            return lastSpeaker.getId();
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        speakerRepository.delete(id);
     }
 }

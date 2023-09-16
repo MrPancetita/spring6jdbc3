@@ -12,6 +12,10 @@ public interface SpeakerRepository {
     Speaker getSpeaker(int id); 
     Speaker getLastSpeaker();
 
-    Speaker updateSpeaker(Speaker speaker); 
+    Speaker updateSpeaker(Speaker speaker);
+
+    void updateSpeaker(List<Object[]> pairs);
+
+    void delete(int id); 
 
 }
