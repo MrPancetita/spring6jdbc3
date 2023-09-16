@@ -606,3 +606,19 @@ SELECT * FROM speaker ID DESC NULLS LAST [42000-214]
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM SPRING6JDBC3.SPEAKER ID [*]DESC NULLS LAST"
 Syntax error in SQL statement "SELECT * FROM SPRING6JDBC3.SPEAKER ID [*]DESC NULLS LAST"; SQL statement:
 SELECT * FROM SPRING6JDBC3.SPEAKER ID DESC NULLS LAST [42000-214]
+2023-09-16 16:20:07 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM SPRING6JDBC3.SPEAKER INFORMATION_SCHEMA[*].INDEXES"
+Syntax error in SQL statement "SELECT * FROM SPRING6JDBC3.SPEAKER INFORMATION_SCHEMA[*].INDEXES"; SQL statement:
+SELECT * FROM SPRING6JDBC3.SPEAKER INFORMATION_SCHEMA.INDEXES [42000-214]
+2023-09-16 16:20:09 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * FROM SPRING6JDBC3.SPEAKER INFORMATION_SCHEMA[*].INDEXES"
+Syntax error in SQL statement "SELECT * FROM SPRING6JDBC3.SPEAKER INFORMATION_SCHEMA[*].INDEXES"; SQL statement:
+SELECT * FROM SPRING6JDBC3.SPEAKER INFORMATION_SCHEMA.INDEXES [42000-214]
+2023-09-16 16:20:19 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]INFORMATION_SCHEMA.SEQUENCES"; se esperaba "INSERT"
+Syntax error in SQL statement "[*]INFORMATION_SCHEMA.SEQUENCES"; expected "INSERT"; SQL statement:
+INFORMATION_SCHEMA.SEQUENCES [42001-214]
+2023-09-16 16:20:22 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]INFORMATION_SCHEMA.SEQUENCES"; se esperaba "INSERT"
+Syntax error in SQL statement "[*]INFORMATION_SCHEMA.SEQUENCES"; expected "INSERT"; SQL statement:
+INFORMATION_SCHEMA.SEQUENCES [42001-214]

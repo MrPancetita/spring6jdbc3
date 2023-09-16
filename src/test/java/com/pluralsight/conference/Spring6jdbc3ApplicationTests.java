@@ -92,6 +92,13 @@ class Spring6jdbc3ApplicationTests {
     void testDeleteSpeaker() {
         RestTemplate restTemplate = new RestTemplate();
 
-        restTemplate.delete("http://localhost:8080/speaker/delete/{id}", 326);  
+        restTemplate.delete("http://localhost:8080/speaker/delete/{id}", 840);  
     }   
+
+    @Test
+    void testException() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        restTemplate.getForObject("http://localhost:8080/speaker/test", Speaker.class);  
+    } 
 }
