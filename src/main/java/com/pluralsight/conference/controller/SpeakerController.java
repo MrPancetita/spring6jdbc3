@@ -3,6 +3,7 @@ package com.pluralsight.conference.controller;
 import com.pluralsight.conference.model.Speaker;
 import com.pluralsight.conference.service.SpeakerService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,13 @@ public class SpeakerController {
     }
 
     @PutMapping("/speaker")
+    public Speaker createSpeakerPut(@RequestBody Speaker speaker) {
+        System.out.println("Name: " + speaker.getName());
+        
+        return speakerService.create(speaker); 
+    }
+
+    @PostMapping("/speaker")
     public Speaker createSpeaker(@RequestBody Speaker speaker) {
         System.out.println("Name: " + speaker.getName());
         

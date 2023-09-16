@@ -1,15 +1,20 @@
 package com.pluralsight.conference.repository;
 
 import com.pluralsight.conference.model.Speaker;
+import com.pluralsight.conference.repository.util.SpeakerRowMapper;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+//import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+//import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+//import java.util.ArrayList;
+//import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 
 @Repository("speakerRepository")
 public class SpeakerRepositoryImpl implements SpeakerRepository {
@@ -21,18 +26,36 @@ public class SpeakerRepositoryImpl implements SpeakerRepository {
     }
 
     public List<Speaker> findAll() {
-        Speaker speaker = new Speaker();
-        speaker.setName("Bryan Hansen");
-        speaker.setSkill("Java");
-        List<Speaker> speakers = new ArrayList<>();
-        speakers.add(speaker);
+
+        //First it was with a lambda but it was moved to a SpeakerRowMapper class, so it can be reused
+        List<Speaker> speakers = jdbcTemplate.query("SELECT * FROM speaker", new SpeakerRowMapper());
+
         return speakers;
+        
     }
 
     @Override
     public Speaker create(Speaker speaker) {
         /* Option 1 -- Uses SQL */
-        jdbcTemplate.update("INSERT INTO speaker (name) VALUES (?)",speaker.getName());
+        //jdbcTemplate.update("INSERT INTO speaker (name) VALUES (?)",speaker.getName());
+
+        /* Option 1A -- Only if you care that an object is returned after its creation, a lot of extrawork */
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public java.sql.PreparedStatement createPreparedStatement(java.sql.Connection connection)
+                    throws java.sql.SQLException {
+                java.sql.PreparedStatement ps = connection.prepareStatement("INSERT INTO speaker (name) VALUES (?)", new String[] {"id"});
+                ps.setString(1, speaker.getName());
+                return ps;
+            }
+        }, keyHolder);
+
+        Number id = keyHolder.getKey();
+
+        return getSpeaker(id.intValue());
+
          
         /* Option 2 -- More wordy but flexible (ORM approach) 
         SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate);
@@ -51,6 +74,10 @@ public class SpeakerRepositoryImpl implements SpeakerRepository {
         */
 
 
-       return null; 
+       //return null; 
+    }
+
+    private Speaker getSpeaker(int id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM speaker WHERE id = ?", new SpeakerRowMapper(), id);
     }
 }
